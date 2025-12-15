@@ -1,0 +1,24 @@
+---
+- name: Ensure base packages are installed
+  apt:
+    name:
+      - git
+      - curl
+      - unzip
+    state: present
+  become: true
+
+- name: Ensure locale is set
+  locale_gen:
+    name: en_US.UTF-8
+    state: present
+  become: true
+
+- name: Ensure user 'devops' exists
+  user:
+    name: devops
+    shell: /bin/bash
+    create_home: yes
+    groups: sudo
+    state: present
+  become: true

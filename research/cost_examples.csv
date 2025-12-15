@@ -1,0 +1,10 @@
+Provider,Service,Description,MonthlyCostUSD
+AWS,EC2,t3.small x2,26.00
+AWS,RDS,db.t3.micro,15.00
+AWS,S3,20GB,0.50
+Azure,VM,B2s x2,30.00
+Azure,SQL,DB S0,20.00
+Azure,Storage,20GB,0.50
+GCP,ComputeEngine,e2-micro x2,20.00
+GCP,CloudSQL,db-f1-micro,10.00
+GCP,GCS,20GB,0.20

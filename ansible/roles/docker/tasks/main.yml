@@ -1,0 +1,25 @@
+---
+- name: Add Docker apt repo
+  apt_repository:
+    repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable'
+    state: present
+  become: true
+
+- name: Install Docker
+  apt:
+    name: [docker-ce, docker-ce-cli, containerd.io]
+    state: present
+  become: true
+
+- name: Ensure docker group exists
+  group:
+    name: docker
+    state: present
+  become: true
+
+- name: Add devops user to docker group
+  user:
+    name: devops
+    groups: docker
+    append: yes
+  become: true

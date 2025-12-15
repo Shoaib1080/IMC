@@ -1,0 +1,6 @@
+---
+- name: Kubernetes client setup
+  hosts: all
+  become: true
+  roles:
+    - kubernetes

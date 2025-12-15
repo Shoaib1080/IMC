@@ -1,0 +1,7 @@
+---
+- name: Baseline configuration for servers
+  hosts: all
+  become: true
+  roles:
+    - common
+    - docker

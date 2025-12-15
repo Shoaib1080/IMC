@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+    environment {
+        REGISTRY = "docker.io"
+        IMAGE = "${env.REGISTRY}/${env.JOB_NAME}:${env.BUILD_NUMBER}"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'docker build -t $IMAGE app/'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'docker run --rm $IMAGE pytest -q'
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                    sh 'sonar-scanner -Dsonar.projectKey=infra-multicloud -Dsonar.sources=app -Dsonar.host.url=https://sonar.example.com -Dsonar.login=$SONAR_TOKEN'
+                }
+            }
+        }
+        stage('Security Scan') {
+            steps {
+                sh 'docker run --rm aquasec/trivy:latest image $IMAGE'
+            }
+        }
+        stage('Push') {
+            when {
+                expression { env.BRANCH_NAME == 'main' }
+            }
+            steps {
+                sh 'docker push $IMAGE'
+            }
+        }
+    }
+}
